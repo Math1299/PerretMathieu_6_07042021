@@ -2,8 +2,8 @@
 const http = require("http");
 // On importe notre application app
 const app = require("./app");
-// Maintenant on crée le server
 
+// Maintenant on crée le server
 // La fonction normalizePort renvoie un port valide, qu'il soit sous la forme d'un numéro ou d'une chaîne
 const normalizePort = (val) => {
     const port = parseInt(val, 10);
