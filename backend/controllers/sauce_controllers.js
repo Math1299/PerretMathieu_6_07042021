@@ -12,7 +12,15 @@ exports.createSauce = (req, res, next) => {
         .catch((error) => res.status(400).json({ error }));
 };
 
-// exports.moodSauce = (req, res, next) => {};
+// COMPORTEMENT A ANALYSER CORRECTEMENT//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// exports.moodSauce = (req, res, next) => {
+//     Sauce.updateOne(
+//         { _id: req.params.id }, // premier argument : l'objet de comparaison pour savoir quel objet on modifie
+//         { ...req.body, _id: req.params.id }
+//     ) // second argument : la nouvelle versoin de l'objet
+//         .then(() => res.status(200).json({ message: "Sauce modifiée" }))
+//         .catch((error) => res.status(400).json({ error }));
+// };
 
 exports.modifySauce = (req, res, next) => {
     Sauce.updateOne(

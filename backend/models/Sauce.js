@@ -3,17 +3,17 @@ const mongoose = require("mongoose");
 
 // On crée le schéma de données dont nos objets auront besoin
 const sauceSchema = mongoose.Schema({
-    // _id: {type: String, require:true}, PAS BESOIN CAR IL EST AUTOMATIQUEMENT CREE PAR MONGOOSE
+    // PAS BESOIN _id CAR IL EST AUTOMATIQUEMENT CREE PAR MONGOOSE
     name: { type: String, require: true },
     manufacturer: { type: String, require: true },
     description: { type: String, require: true },
     heat: { type: Number, require: true },
-    likes: { type: Number, require: true },
-    dislikes: { type: Number, require: true },
+    likes: { type: Number, require: true, default: 0 },
+    dislikes: { type: Number, require: true, default: 0 },
     imageUrl: { type: String, require: true },
     mainPepper: { type: String, require: true },
-    usersLiked: { type: [], require: true },
-    usersDisLiked: { type: [], require: true },
+    usersLiked: { type: [String], require: true },
+    usersDisLiked: { type: [String], require: true },
     userID: { type: String, require: true },
 });
 

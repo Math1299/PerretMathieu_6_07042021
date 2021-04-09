@@ -2,6 +2,7 @@ const express = require("express"); // On importe express
 const app = express(); // On crée notre application express nomée app
 const mongoose = require("mongoose"); // On importe mongoose
 const sauceRoutes = require("./routes/sauce_routes"); // On importe le router
+const userRoutes = require("./routes/user_routes"); // On importe notre second router
 
 mongoose
     .connect(
@@ -34,6 +35,9 @@ app.use(express.json());
 
 // On enregistre notre router comme pour une route unique qui commence par /api/sauces
 app.use("/api/sauces", sauceRoutes);
+
+// On enregistre notre router comme pour une route unique qui commence par /api/auth
+app.use("/api/auth", userRoutes);
 
 // On l'export pour pouvoir l'utiliser depuis nos autres fichiers
 module.exports = app;
