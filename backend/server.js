@@ -1,7 +1,5 @@
-// On importe le package http de node
-const http = require("http");
-// On importe notre application app
-const app = require("./app");
+const http = require("http"); // On importe le package http de node
+const app = require("./app"); // On importe notre application app
 
 // Maintenant on crée le server
 // La fonction normalizePort renvoie un port valide, qu'il soit sous la forme d'un numéro ou d'une chaîne

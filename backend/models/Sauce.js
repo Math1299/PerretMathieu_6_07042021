@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 
 // On crée le schéma de données dont nos objets auront besoin
 const sauceSchema = mongoose.Schema({
-    // PAS BESOIN _id CAR IL EST AUTOMATIQUEMENT CREE PAR MONGOOSE
     name: { type: String, require: true },
     manufacturer: { type: String, require: true },
     description: { type: String, require: true },

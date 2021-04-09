@@ -1,5 +1,4 @@
-// On importe le model Sauce
-const Sauce = require("../models/Sauce");
+const Sauce = require("../models/Sauce"); // On importe le model Sauce
 const fs = require("fs"); // Permet d'accéder aux opérations liées au système de fichier
 
 exports.createSauce = (req, res, next) => {
@@ -17,15 +16,17 @@ exports.createSauce = (req, res, next) => {
         .catch((error) => res.status(400).json({ error }));
 };
 
-// COMPORTEMENT A ANALYSER CORRECTEMENT//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// exports.moodSauce = (req, res, next) => {
-//     Sauce.updateOne(
-//         { _id: req.params.id }, // premier argument : l'objet de comparaison pour savoir quel objet on modifie
-//         { ...req.body, _id: req.params.id }
-//     ) // second argument : la nouvelle versoin de l'objet
-//         .then(() => res.status(200).json({ message: "Sauce modifiée" }))
-//         .catch((error) => res.status(400).json({ error }));
-// };
+exports.getAllSauce = (req, res, next) => {
+    Sauce.find() // cette méthode nous permet de recupérer la liste complète retourne une Promise
+        .then((sauces) => res.status(200).json(sauces))
+        .catch((error) => res.status(400).json({ error }));
+};
+
+exports.getOneSauce = (req, res, next) => {
+    Sauce.findOne({ _id: req.params.id }) // cette méthode nous permet de récupérer une sauce grâce à son ID elle retourne une Promise
+        .then((sauce) => res.status(200).json(sauce))
+        .catch((error) => res.status(404).json({ error }));
+};
 
 exports.modifySauce = (req, res, next) => {
     const sauceObject = req.file
@@ -38,8 +39,8 @@ exports.modifySauce = (req, res, next) => {
         : { ...req.body };
     Sauce.updateOne(
         { _id: req.params.id }, // premier argument : l'objet de comparaison pour savoir quel objet on modifie
-        { ...sauceObject, _id: req.params.id }
-    ) // second argument : la nouvelle versoin de l'objet
+        { ...sauceObject, _id: req.params.id } // second argument : la nouvelle version de l'objet
+    )
         .then(() => res.status(200).json({ message: "Sauce modifiée" }))
         .catch((error) => res.status(400).json({ error }));
 };
@@ -59,14 +60,12 @@ exports.deleteSauce = (req, res, next) => {
         .catch((error) => res.status(500).json({ error }));
 };
 
-exports.getOneSauce = (req, res, next) => {
-    Sauce.findOne({ _id: req.params.id }) // cette méthode nous permet de récupérer une sauce grâce à son ID elle retourne une Promise
-        .then((sauce) => res.status(200).json(sauce))
-        .catch((error) => res.status(404).json({ error }));
-};
-
-exports.getAllSauces = (req, res, next) => {
-    Sauce.find() // cette méthode nous permet de recupérer la liste complète retourne une Promise
-        .then((sauces) => res.status(200).json(sauces))
-        .catch((error) => res.status(400).json({ error }));
-};
+// COMPORTEMENT A ANALYSER CORRECTEMENT//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// exports.moodSauce = (req, res, next) => {
+//     Sauce.updateOne(
+//         { _id: req.params.id }, // premier argument : l'objet de comparaison pour savoir quel objet on modifie
+//         { ...req.body, _id: req.params.id }
+//     ) // second argument : la nouvelle versoin de l'objet
+//         .then(() => res.status(200).json({ message: "Sauce modifiée" }))
+//         .catch((error) => res.status(400).json({ error }));
+// };
