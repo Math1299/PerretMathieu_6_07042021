@@ -1,10 +1,15 @@
 // On importe le model Sauce
 const Sauce = require("../models/Sauce");
+const fs = require("fs"); // Permet d'accéder aux opérations liées au système de fichier
 
 exports.createSauce = (req, res, next) => {
-    delete req.body._id; // il est déjà généré automatiquement par mongoDB
+    const sauceObject = JSON.parse(req.body.sauce);
+    delete sauceObject._id; // il est déjà généré automatiquement par mongoDB
     const sauce = new Sauce({
-        ...req.body, // l'opérateur spread permet de faire une copie de tous les éléments de req.body
+        ...sauceObject, // l'opérateur spread permet de faire une copie de tous les éléments de sauceObject
+        imageUrl: `${req.protocol}://${req.get("host")}/images/${
+            req.file.filename
+        }`,
     });
     sauce
         .save() // cette méthode permet d'enregistrer notre Sauce dans la BD elle renvoie une Promise
@@ -23,18 +28,35 @@ exports.createSauce = (req, res, next) => {
 // };
 
 exports.modifySauce = (req, res, next) => {
+    const sauceObject = req.file
+        ? {
+              ...JSON.parse(req.body.sauce),
+              imageUrl: `${req.protocol}://${req.get("host")}/images/${
+                  req.file.filename
+              }`,
+          }
+        : { ...req.body };
     Sauce.updateOne(
         { _id: req.params.id }, // premier argument : l'objet de comparaison pour savoir quel objet on modifie
-        { ...req.body, _id: req.params.id }
+        { ...sauceObject, _id: req.params.id }
     ) // second argument : la nouvelle versoin de l'objet
         .then(() => res.status(200).json({ message: "Sauce modifiée" }))
         .catch((error) => res.status(400).json({ error }));
 };
 
 exports.deleteSauce = (req, res, next) => {
-    Sauce.deleteOne({ _id: req.params.id })
-        .then(() => res.status(200).json({ message: "Sauce supprimée" }))
-        .catch((error) => res.status(400).json({ error }));
+    Sauce.findOne({ _id: req.params.id })
+        .then((sauce) => {
+            const filename = sauce.imageUrl.split("/images/")[1];
+            fs.unlink(`images/${filename}`, () => {
+                Sauce.deleteOne({ _id: req.params.id })
+                    .then(() =>
+                        res.status(200).json({ message: "Sauce supprimée" })
+                    )
+                    .catch((error) => res.status(400).json({ error }));
+            });
+        })
+        .catch((error) => res.status(500).json({ error }));
 };
 
 exports.getOneSauce = (req, res, next) => {

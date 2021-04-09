@@ -3,6 +3,7 @@ const app = express(); // On crée notre application express nomée app
 const mongoose = require("mongoose"); // On importe mongoose
 const sauceRoutes = require("./routes/sauce_routes"); // On importe le router
 const userRoutes = require("./routes/user_routes"); // On importe notre second router
+const path = require("path"); // Permet d'accéder au chemin de notre système de fichier
 
 mongoose
     .connect(
@@ -33,11 +34,10 @@ app.use((req, res, next) => {
 // Utilisation de la méthode d express permettant de transformer le corps de la requête en JSON utilisable
 app.use(express.json());
 
-// On enregistre notre router comme pour une route unique qui commence par /api/sauces
-app.use("/api/sauces", sauceRoutes);
+app.use("/images", express.static(path.join(__dirname, "images")));
 
-// On enregistre notre router comme pour une route unique qui commence par /api/auth
-app.use("/api/auth", userRoutes);
+app.use("/api/sauces", sauceRoutes); // On enregistre notre router comme pour une route unique qui commence par /api/sauces
+app.use("/api/auth", userRoutes); // On enregistre notre router comme pour une route unique qui commence par /api/auth
 
 // On l'export pour pouvoir l'utiliser depuis nos autres fichiers
 module.exports = app;
