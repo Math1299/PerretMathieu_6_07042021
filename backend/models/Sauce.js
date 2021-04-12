@@ -3,17 +3,17 @@ const mongoose = require("mongoose");
 
 // On crée le schéma de données dont nos objets auront besoin
 const sauceSchema = mongoose.Schema({
-    name: { type: String, require: true },
-    manufacturer: { type: String, require: true },
-    description: { type: String, require: true },
-    heat: { type: Number, require: true },
-    likes: { type: Number, require: true, default: 0 },
-    dislikes: { type: Number, require: true, default: 0 },
-    imageUrl: { type: String, require: true },
-    mainPepper: { type: String, require: true },
-    usersLiked: { type: [String], require: true },
-    usersDisLiked: { type: [String], require: true },
-    userID: { type: String, require: true },
+    userId: { type: String, required: true },
+    name: { type: String, required: true },
+    manufacturer: { type: String, required: true },
+    description: { type: String, required: true },
+    heat: { type: Number, required: true },
+    likes: { type: Number, default: 0 },
+    dislikes: { type: Number, default: 0 },
+    imageUrl: { type: String, required: true },
+    mainPepper: { type: String, required: true },
+    usersLiked: { type: [String] },
+    usersDisLiked: { type: [String] },
 });
 
 // On exporte le schéma en tant que modèle mongoose appelé Sauce le rendant disponible pour notre application express
