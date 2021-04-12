@@ -10,7 +10,7 @@ router.get("/", auth, sauceCtrl.getAllSauce); // lire/trouver toutes les sauces 
 router.get("/:id", auth, sauceCtrl.getOneSauce); // lire/trouver une seule sauce dans la BD
 router.put("/:id", auth, multer, sauceCtrl.modifySauce); // modification d'une sauce existante
 router.delete("/:id", auth, sauceCtrl.deleteSauce); //supprimer une sauce de la BD
-// router.post("/:id/like", auth, sauceCtrl.likeSauce); // ajout de like et dislike
+router.post("/:id/like", auth, sauceCtrl.likeSauce); // ajout de like et dislike
 
 // On réexporte le router
 module.exports = router;

@@ -59,3 +59,6 @@ exports.deleteSauce = (req, res, next) => {
         })
         .catch((error) => res.status(500).json({ error }));
 };
+
+// création like dislike pour les sauces
+exports.likeSauce = (req, res, next) => {};

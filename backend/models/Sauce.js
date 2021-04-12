@@ -8,12 +8,12 @@ const sauceSchema = mongoose.Schema({
     manufacturer: { type: String, required: true },
     description: { type: String, required: true },
     heat: { type: Number, required: true },
-    likes: { type: Number, default: 0 },
-    dislikes: { type: Number, default: 0 },
+    likes: { type: Number, required: false, default: 0 },
+    dislikes: { type: Number, required: false, default: 0 },
     imageUrl: { type: String, required: true },
     mainPepper: { type: String, required: true },
-    usersLiked: { type: [String] },
-    usersDisLiked: { type: [String] },
+    usersLiked: { type: [String], required: false },
+    usersDisLiked: { type: [String], required: false },
 });
 
 // On exporte le schéma en tant que modèle mongoose appelé Sauce le rendant disponible pour notre application express
