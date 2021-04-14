@@ -1,4 +1,6 @@
-const mongoose = require("mongoose"); // On importe mongoose pour créer notre schema
+const mongoose = require("mongoose");
+
+//ajout de ce validateur comme plugin de notre schéma pour eviter les doublons d'email
 const uniqueValidator = require("mongoose-unique-validator");
 
 const userSchema = mongoose.Schema({
@@ -6,7 +8,8 @@ const userSchema = mongoose.Schema({
     password: { type: String, required: true },
 });
 
-userSchema.plugin(uniqueValidator); // On applique le validator au schema avant d'en faire un modèle
+//application au schéma avant d'en faire un modèle
+userSchema.plugin(uniqueValidator);
 
-// On exporte le schema sous forme de modèle
-module.exports = mongoose.model("User", userSchema);
+//export de notre schéma sous forme de modèle
+module.exports = mongoose.model("user", userSchema);

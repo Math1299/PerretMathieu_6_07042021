@@ -1,20 +1,20 @@
-// On importe mongoose pour pouvoir créer le schéma
+//On importe mongoose pour pouvoir créer notre schéma
 const mongoose = require("mongoose");
 
-// On crée le schéma de données dont nos objets auront besoin
+//On crée le schéma de données dont nos objets auront besoin
 const sauceSchema = mongoose.Schema({
     userId: { type: String, required: true },
     name: { type: String, required: true },
     manufacturer: { type: String, required: true },
     description: { type: String, required: true },
-    heat: { type: Number, required: true },
-    likes: { type: Number, required: false, default: 0 },
-    dislikes: { type: Number, required: false, default: 0 },
-    imageUrl: { type: String, required: true },
     mainPepper: { type: String, required: true },
-    usersLiked: { type: [String], required: false },
-    usersDisLiked: { type: [String], required: false },
+    imageUrl: { type: String, required: true },
+    heat: { type: Number, required: true },
+    likes: { type: Number },
+    dislikes: { type: Number },
+    usersLiked: { type: [String] },
+    usersDisliked: { type: [String] },
 });
 
-// On exporte le schéma en tant que modèle mongoose appelé Sauce le rendant disponible pour notre application express
-module.exports = mongoose.model("Sauce", sauceSchema);
+//On exporte le schéma en tant que modèle mongoose appelé sauce le rendant disponible pour notre application express
+module.exports = mongoose.model("sauce", sauceSchema); //(premier argu:nom du modèle, second argu:schéma créé)

@@ -1,53 +1,42 @@
-require("dotenv").config();
-const express = require("express"); // On importe express
-const app = express(); // On crée notre application express nomée app
-const mongoose = require("mongoose"); // On importe mongoose
-mongoose.set("useCreateIndex", true); // collection.ensureIndex is deprecated. Use createIndexes instead.
-const path = require("path"); // Permet d'accéder au chemin de notre système de fichier
+//stock les config dépendantes de l'environement hors du code
+const dotenv = require("dotenv").config();
 
-const helmet = require("helmet"); // Helmet est une collection de middleware de sécurité
+const express = require("express");
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+const path = require("path"); //donne accès au chemin du système de fichier
 
-const sauceRoutes = require("./routes/sauce_routes"); // On importe le router
-const userRoutes = require("./routes/user_routes"); // On importe notre second router
+//import de nos routers
+const sauceRoutes = require("./routes/sauces");
+const userRoutes = require("./routes/user");
 
+const app = express();
+
+//liaison à la base de donnéés
 mongoose
-    .connect(
-        "mongodb+srv://" +
-            process.env.DB_USER +
-            ":" +
-            process.env.DB_PASS +
-            "@" +
-            process.env.DB_HOST,
-        {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        }
-    )
+    .connect("mongodb+srv://" + process.env.DB_USER + ":" + process.env.DB_PASS + "@" + process.env.DB_HOST, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useCreateIndex: true,
+        useFindAndModify: false,
+    })
     .then(() => console.log("Connexion à MongoDB réussie !"))
     .catch(() => console.log("Connexion à MongoDB échouée !"));
 
-// middleware général pour eviter les pb de CORS
+//middleware général pour eviter les pb CORS
 app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*"); //1 avec * on peut y accéder depuis partout
-    res.setHeader(
-        "Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
-    ); //2 ajoute les headers mentionnés aux requêtes envoyées vers notre API
-    res.setHeader(
-        "Access-Control-Allow-Methods",
-        "GET, POST, PUT, DELETE, PATCH, OPTIONS"
-    ); //3 envoi des requête avec les méthodes mentionnées
+    res.setHeader("Access-Control-Allow-Origin", "*"); // * on peut donc y accéder de partout
+    res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
     next();
 });
 
-// Utilisation de la méthode d express permettant de transformer le corps de la requête en JSON utilisable
-app.use(express.json());
-app.use(helmet());
+//Méthode d express permettant de transformer le corps de la requête en JSON utilisable
+app.use(bodyParser.json());
 
 app.use("/images", express.static(path.join(__dirname, "images")));
 
-app.use("/api/sauces", sauceRoutes); // On enregistre notre router comme pour une route unique qui commence par /api/sauces
-app.use("/api/auth", userRoutes); // On enregistre notre router comme pour une route unique qui commence par /api/auth
+app.use("/api/sauces", sauceRoutes); //import des routes depuis le controller sauces.js
+app.use("/api/auth", userRoutes); //import des routes depuis le controller user.js
 
-// On l'export pour pouvoir l'utiliser depuis nos autres fichiers
 module.exports = app;
