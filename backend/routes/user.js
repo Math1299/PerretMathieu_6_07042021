@@ -1,10 +1,15 @@
 const express = require("express");
 const router = express.Router();
 
-const userCtrl = require("../controllers/user"); //permet d'associer les fonctions aux différentes routes
+//permet d'associer les fonctions/logiques métier aux différentes routes
+const userCtrl = require("../controllers/user");
+
+//importation des middlewares de vérification mdp et email
+const passwordValidator = require("../middleware/password");
+const emailValidator = require("../middleware/email");
 
 //création des deux routes POST car le frontend va aussi envoyer des infos => email et mdp
-router.post("/signup", userCtrl.signup);
+router.post("/signup", passwordValidator, emailValidator, userCtrl.signup);
 router.post("/login", userCtrl.login);
 
 module.exports = router;

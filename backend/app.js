@@ -6,6 +6,13 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const path = require("path"); //donne accès au chemin du système de fichier
 const helmet = require("helmet"); //Plugin de protection des headers (collection de 11 petits middleware)
+const rateLimit = require("express-rate-limit"); //limitation des demandes d'accès répétées à l'API
+
+const limiter = rateLimit({
+    windowMS: 5 * 60 * 1000, // 5 minutes calcul en milisecondes
+    max: 50, //chaque IP est limitée à x requêtes
+    message: "Too many request from this IP",
+});
 
 //import de nos routers
 const sauceRoutes = require("./routes/sauces");
@@ -36,7 +43,7 @@ app.use((req, res, next) => {
 
 //Méthode d express permettant de transformer le corps de la requête en JSON utilisable
 app.use(bodyParser.json());
-
+app.use(limiter);
 app.use("/images", express.static(path.join(__dirname, "images")));
 
 app.use("/api/sauces", sauceRoutes); //import des routes depuis le controller sauces.js

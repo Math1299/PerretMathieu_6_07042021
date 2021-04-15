@@ -8,8 +8,8 @@ exports.createSauce = (req, res, next) => {
     const sauce = new Sauce({
         ...sauceObject,
         imageUrl: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
-        // likes: 0,
-        // dislikes: 0,
+        likes: 0,
+        dislikes: 0,
         // usersLiked: [],
         // usersDisliked: [],
     });
@@ -61,4 +61,41 @@ exports.getAllSauces = (req, res, next) => {
 };
 
 //logique métier permettant permettant de like ou dislike une sauce
-// exports.likeDislikeSauce = (req, res, next) => {};
+exports.likeDislikeSauce = (req, res, next) => {
+    Sauce.findOne({ _id: req.params.id }) //on recupère une sauce via son id
+        .then((sauce) => {
+            const userId = req.body.userId;
+            const like = req.body.like === 1; //on ajoute un like
+            const dislike = req.body.like === -1; //on ajoute un dislike
+            const changeMood = req.body.like === 0; //on change de choix donc retour à 0
+            const authToLike = !sauce.usersLiked.includes(userId); //vérification via userId si on a le droit de like
+            const authToDislike = !sauce.usersDisliked.includes(userId); //vérification via userId si on a le droit de dislike
+            const alreadyDone = sauce.usersLiked.includes(userId) || sauce.usersDisliked.includes(userId); //vérification si on a déjà donné son avis OU
+
+            //si on veut et que l'on peut like alors push id
+            if (like && authToLike) {
+                sauce.usersLiked.push(userId);
+            } //si on veut et que l'on peut dislike alors push id
+            if (dislike && authToDislike) {
+                sauce.usersDisliked.push(userId);
+            } //si on veut changer de choix
+            if (changeMood && alreadyDone) {
+                //si déjà like retour en arrière de l'index
+                if (sauce.usersLiked.includes(userId)) {
+                    let index = sauce.usersLiked.indexOf(userId);
+                    sauce.usersLiked.splice(index, 1);
+                } else {
+                    //si déjà dislike retour en arrière de l'index
+                    let index = sauce.usersDisliked.indexOf(userId);
+                    sauce.usersDisliked.splice(index, 1);
+                }
+            }
+            sauce.likes = sauce.usersLiked.length;
+            sauce.dislikes = sauce.usersDisliked.length;
+            const updateSauce = sauce;
+            updateSauce.save();
+            return updateSauce;
+        })
+        .then((sauce) => res.status(200).json(sauce))
+        .catch((error) => res.status(400).json({ error }));
+};
