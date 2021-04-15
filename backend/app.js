@@ -1,10 +1,11 @@
 //stock les config dépendantes de l'environement hors du code
-const dotenv = require("dotenv").config();
+require("dotenv").config();
 
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const path = require("path"); //donne accès au chemin du système de fichier
+const helmet = require("helmet"); //Plugin de protection des headers (collection de 11 petits middleware)
 
 //import de nos routers
 const sauceRoutes = require("./routes/sauces");
@@ -22,6 +23,8 @@ mongoose
     })
     .then(() => console.log("Connexion à MongoDB réussie !"))
     .catch(() => console.log("Connexion à MongoDB échouée !"));
+
+app.use(helmet());
 
 //middleware général pour eviter les pb CORS
 app.use((req, res, next) => {
