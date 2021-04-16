@@ -27,4 +27,4 @@ Du côté backend
 
 -   1 - Renommer le fichier .process-env en .env
 
--   2 - Remplacer les valeurs par celles transmissent
+-   2 - Remplacer les valeurs par celles transmises
