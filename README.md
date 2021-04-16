@@ -25,10 +25,6 @@ Du côté backend
 
 -------------------- PROCESS A SUIVRE POUR POUVOIR UTILISER L API -------------------
 
-1 - Renommer le fichier .process-env en .env
-2 - Remplacer les valeurs par celles transmissent
+-   1 - Renommer le fichier .process-env en .env
 
-DB_HOST=HOST
-DB_USER=USER
-DB_PASS=PASSWORD
-JWT_KEY=TOKEN
+-   2 - Remplacer les valeurs par celles transmissent
