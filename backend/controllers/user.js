@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt"); //package de cryptage pour les mdp
 const jwt = require("jsonwebtoken"); //package pour encoder les tokens
+const maskemail = require("maskemail"); //permet de masquer les adresses email dans la DB
 
 const User = require("../models/User"); //récupération de notre modèle User
 
@@ -11,7 +12,7 @@ exports.signup = (req, res, next) => {
         .hash(req.body.password, 10)
         .then((hash) => {
             const user = new User({
-                email: req.body.email,
+                email: maskemail(req.body.email, { allowed: /@\.-/ }),
                 password: hash,
             });
             user.save()
@@ -26,7 +27,7 @@ exports.signup = (req, res, next) => {
 // On compare le mdp entré avec le hash qui est dans la BD   ====> erreur si pas bon
 // Si tout est OK revoie de son userID et token
 exports.login = (req, res, next) => {
-    User.findOne({ email: req.body.email }).then((user) => {
+    User.findOne({ email: maskemail(req.body.email) }).then((user) => {
         if (!user) {
             return res.status(401).json({ error: "Utilisateur non trouvé" });
         }
