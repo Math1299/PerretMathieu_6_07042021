@@ -25,7 +25,7 @@ exports.signup = (req, res, next) => {
 // Pour connecter les utilisateurs existants
 // On récupère l'utilisateur de la base qui correspond a email rentré ====>  erreur si pas bon
 // On compare le mdp entré avec le hash qui est dans la BD   ====> erreur si pas bon
-// Si tout est OK revoie de son userID et token
+// On utilise la fonction sign de jsonwebtoken pour encoder un nouveau Token Si tout est OK renvoie son userID et token
 exports.login = (req, res, next) => {
     User.findOne({ email: maskemail(req.body.email) }).then((user) => {
         if (!user) {
